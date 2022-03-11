@@ -27,14 +27,13 @@ public class DepositServiceImpl implements DepositService {
     public Mono<DepositDto> getDepositByName(String name) {
         return depositRepository.findByName(name);
     }*/
-
+/*
     @Override
     public Mono<DepositDto> getDepositByDepositNumber(String depositNumber) {
         return depositRepository.findByDepositNumber(depositNumber)
                 .switchIfEmpty(Mono.just(DepositDto.builder()
                         .depositNumber(null).build()));
-    }
-
+    }*/
 
     public Mono<DepositDto> saveDeposit(Mono<DepositDto> DepositDtoMono) {
         return DepositDtoMono.map(AppUtils::dtoToEntity)

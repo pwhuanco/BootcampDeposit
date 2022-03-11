@@ -11,5 +11,5 @@ public interface DepositRepository extends ReactiveMongoRepository<Deposit, Stri
 
 
     /*Mono<DepositDto> findByName(String name);*/
-    Mono<DepositDto> findByDepositNumber(String depositNumber);
+    //Mono<DepositDto> findByDepositNumber(String depositNumber);
 }

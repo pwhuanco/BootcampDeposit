@@ -9,12 +9,12 @@ import lombok.*;
 @Builder
 public class DepositDto {
 	private String id;
-	private String balance;
+	private String amount;
 	private String currency;
 	private String idClient;
-	private String depositNumber;
-	private String typeSavingAcc;
-	private String typeCurrentAcc;
-	private String typeTermAcc;
+	private String fromAccountNumber;
+	private String toAccountNumber;
+	private String depositor;
+	private String timestamp;
 
 }

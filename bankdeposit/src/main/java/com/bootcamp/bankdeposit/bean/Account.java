@@ -4,16 +4,17 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("deposit")
+@Document("account")
 @Data
-public class Deposit {
+public class Account {
 	@Id
 	private String id;
-	private String amount;
+	private String balance;
 	private String currency;
 	private String idClient;
-	private String fromAccountNumber;
-	private String toAccountNumber;
-	private String depositor;
-	private String timestamp;
+	private String accountNumber;
+	private String typeSavingAcc;
+	private String typeCurrentAcc;
+	private String typeTermAcc;
+
 }

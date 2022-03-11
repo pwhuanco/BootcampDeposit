@@ -5,6 +5,7 @@ import com.bootcamp.bankdeposit.service.DepositService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,12 +16,15 @@ import reactor.core.publisher.Mono;
 public class DepositController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DepositController.class);
 
+    @Value("${spring.application.name}")
+    private String appName;
     @Autowired
     private DepositService depositService;
 
     @GetMapping
     public Flux<DepositDto> getDeposit(){
         LOGGER.debug("Getting Deposit!");
+        LOGGER.debug("Application cloud property: " + appName);
         return depositService.getDeposit();
     }
 
@@ -33,6 +37,7 @@ public class DepositController {
     @PostMapping
     public Mono<DepositDto> saveDeposit(@RequestBody Mono<DepositDto> depositDtoMono){
         LOGGER.debug("Saving clients!");
+        LOGGER.debug("Application cloud property: " + appName);
         return depositService.saveDeposit(depositDtoMono);
     }
 
