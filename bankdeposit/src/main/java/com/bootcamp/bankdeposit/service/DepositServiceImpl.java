@@ -3,6 +3,8 @@ package com.bootcamp.bankdeposit.service;
 import com.bootcamp.bankdeposit.dto.DepositDto;
 import com.bootcamp.bankdeposit.repository.DepositRepository;
 import com.bootcamp.bankdeposit.util.AppUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -11,10 +13,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class DepositServiceImpl implements DepositService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DepositServiceImpl.class);
     @Autowired
     private DepositRepository depositRepository;
 
     public Flux<DepositDto> getDeposit() {
+
+        LOGGER.debug("In getDeposit()");
         return depositRepository.findAll().map(AppUtils::entityToDto);
     }
 

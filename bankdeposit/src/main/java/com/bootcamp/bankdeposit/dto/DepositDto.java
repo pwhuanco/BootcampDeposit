@@ -17,4 +17,13 @@ public class DepositDto {
 	private String depositor;
 	private String timestamp;
 
+	public DepositDto(String amount, String currency, String idClient, String fromAccountNumber, String toAccountNumber, String depositor, String timestamp) {
+		this.amount = amount;
+		this.currency = currency;
+		this.idClient = idClient;
+		this.fromAccountNumber = fromAccountNumber;
+		this.toAccountNumber = toAccountNumber;
+		this.depositor = depositor;
+		this.timestamp = timestamp;
+	}
 }
