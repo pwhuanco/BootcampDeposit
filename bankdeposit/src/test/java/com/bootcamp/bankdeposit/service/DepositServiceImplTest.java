@@ -29,9 +29,9 @@ class DepositServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        fluxDto = Flux.just(new Deposit("098765432", "13100", "USD", "007", "", "876543222", "Pepe", "8765432",""));
+        fluxDto = Flux.just(new Deposit("098765432", 13100.00, "USD", "007", "", "876543222", "Pepe", "8765432",""));
 
-        depositDtoMono = Mono.just(new DepositDto("13100", "USD", "007", "", "876543222", "Pepe", "8765432"));
+        depositDtoMono = Mono.just(new DepositDto(13100.00, "USD", "007", "", "876543222", "Pepe", "8765432"));
     }
 
     @Test
