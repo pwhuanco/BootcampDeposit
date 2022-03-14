@@ -127,31 +127,30 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private void updateBalanceAccount(AccountDto account) {
+        account.setMovementPerMonth(account.getMovementPerMonth()+1);
         restTemplate.put(urlApigateway+urlAccounts+account.getId(),account);
     }
 
-    /*
-*Pasivos (cuentas bancarias)
-*   -Ahorro:
-*   libre  de  comisión  por  mantenimiento  y  con  un  límite máximo de movimientos mensuales.
-*   -Cuenta  corriente:  posee  comisión  de mantenimiento y  sin  límite de movimientos mensuales.
-*   -Plazo  fijo:  libre  de  comisión  por  mantenimiento, solo  permite  un movimiento de
-*   retiro o depósito en un día específico del mes.
- */
+    /**
+    *Pasivos (cuentas bancarias)
+    *   -Ahorro:
+    *   libre  de  comisión  por  mantenimiento  y  con  un  límite máximo de movimientos mensuales.
+    *   -Cuenta  corriente:  posee  comisión  de mantenimiento y  sin  límite de movimientos mensuales.
+    *   -Plazo  fijo:  libre  de  comisión  por  mantenimiento, solo  permite  un movimiento de
+    *   retiro o depósito en un día específico del mes.
+     */
     private boolean approveDeposit(AccountDto account, DepositDto depositDto) {
         boolean resp = false;
         if(Constant.TIPO_CUENTA_PLAZO.equalsIgnoreCase(account.getAccountType())) {
             if(Constant.CAN_BE_DEPOSIT.equalsIgnoreCase(account.getCanBeDeposit())){
-                //account = caclulateBalance(account, depositDto);
+
                 resp = true;
             }
         } else if(Constant.TIPO_CUENTA_AHORRO.equalsIgnoreCase(account.getAccountType())){
-            if(Constant.DEPOSIT_LIMITED < account.getDepositLimited()) {
-                //account = caclulateBalance(account, depositDto);
+            if(account.getMovementPerMonth() <= account.getMaxLimitMovementPerMonth()) {
                 resp = true;
             }
-            resp = true;
-        } else if (Constant.TIPO_CUENTA_PLAZO.equalsIgnoreCase(account.getAccountType())){
+        } else if (Constant.TIPO_CUENTA_CORRIENTE.equalsIgnoreCase(account.getAccountType())){
             resp = true;
         }
         return resp;
