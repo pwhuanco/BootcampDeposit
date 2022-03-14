@@ -28,9 +28,10 @@ class DepositControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        dto = new DepositDto("098765432","13100","USD","007","","876543222","Pepe","8765432");
+        dto = new DepositDto("098765432","13100","USD","007","","876543222","Pepe",
+                "8765432","");
         fluxDto = Flux.just(dto);
-        fluxDo = Flux.just(new Deposit("098765432","13100","USD","007","","876543222","Pepe","8765432"));
+        fluxDo = Flux.just(new Deposit("098765432","13100","USD","007","","876543222","Pepe","8765432",""));
     }
 
     @Test

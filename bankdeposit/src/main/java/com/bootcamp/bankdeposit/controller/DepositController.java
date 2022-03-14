@@ -1,5 +1,6 @@
 package com.bootcamp.bankdeposit.controller;
 
+import com.bootcamp.bankdeposit.dto.AccountDto;
 import com.bootcamp.bankdeposit.dto.DepositDto;
 import com.bootcamp.bankdeposit.service.DepositService;
 import org.slf4j.Logger;
@@ -7,8 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import javax.annotation.Resource;
 
 //@Slf4j
 @RestController
@@ -18,7 +22,13 @@ public class DepositController {
 
     @Value("${spring.application.name}")
     private String appName;
-    @Autowired
+    @Value("${microservice-accounts.uri}")
+    private String urlAccounts;
+    @Value("${apiclient.uri}")
+    private String urlApigateway;
+    @Autowired(required = false)
+    private WebClient.Builder webClient;
+    @Resource
     private DepositService depositService;
 
     @GetMapping
@@ -35,9 +45,13 @@ public class DepositController {
     }
 
     @PostMapping
-    public Mono<DepositDto> saveDeposit(@RequestBody Mono<DepositDto> depositDtoMono){
-        LOGGER.debug("Saving clients!");
-        LOGGER.debug("Application cloud property: " + appName);
+    public Mono<DepositDto> saveDeposit(@RequestBody DepositDto depositDtoMono){
+        LOGGER.debug("Saving deposit!");
+       /* Mono<AccountDto> monoDto = webClient.build().get().uri(urlApigateway+urlAccounts,depositDtoMono.getToAccountId())
+                .retrieve()
+                .bodyToMono(AccountDto.class);
+        AccountDto dto = ((AccountDto) monoDto.block());
+        LOGGER.debug("dto !"+dto);*/
         return depositService.saveDeposit(depositDtoMono);
     }
 

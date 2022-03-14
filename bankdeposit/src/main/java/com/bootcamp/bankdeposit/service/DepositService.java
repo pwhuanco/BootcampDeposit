@@ -13,7 +13,7 @@ public interface DepositService {
 
     //Mono<DepositDto> getDepositByDepositNumber(String depositNumber);
 
-    Mono<DepositDto> saveDeposit(Mono<DepositDto> depositDtoMono);
+    Mono<DepositDto> saveDeposit(DepositDto depositDtoMono);
 
     Mono<DepositDto> updateDeposit(Mono<DepositDto> depositDtoMono, String id);
 
