@@ -40,5 +40,17 @@ public class Account {
 	 * 0: no
 	 */
 	private String canBeDeposit;
-
+	/**
+	 * depositLimited: indica la cantidad maxima de veces que se puede depositar
+	 * X: cantidad maxima de despositos mensuales
+	 * 0: no se puede depositar
+	 */
+	private int depositLimited;
+	/**
+	 * accountType: indica  el tipo de cuenta
+	 * 1: Cuenta de Ahorro
+	 * 2: Cuenta Corriente
+	 * 3: Plazo fijo
+	 */
+	private String accountType;
 }
