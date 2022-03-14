@@ -9,12 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.math.BigDecimal;
 
 @Service
 public class DepositServiceImpl implements DepositService {
@@ -57,7 +58,8 @@ public class DepositServiceImpl implements DepositService {
                         .depositNumber(null).build()));
     }*/
 
-    public Mono<DepositDto> saveDeposit(DepositDto depositDtoMono) {
+    public Mono<DepositDto> saveDeposit(DepositDto depositDto) {
+//    public Mono<DepositDto> saveDeposit(Mono<DepositDto> depositDto) {
         LOGGER.debug("url a invocar:"+urlApigateway+urlAccounts);
         /*depositDtoMono.subscribe(p ->
                  webClient.build().get().uri(urlApigateway+urlAccounts,p.getToAccountId())
@@ -67,7 +69,6 @@ public class DepositServiceImpl implements DepositService {
                 .retrieve()
                 .bodyToMono(AccountDto.class);*/
 //        AccountDto dto = ((AccountDto) monoDto.block());
-//        LOGGER.debug("client:"+dto);
 /*
         return Mono.just(depositDtoMono)
                 .flatMap(
@@ -96,25 +97,74 @@ public class DepositServiceImpl implements DepositService {
                     }
                 });
 */
-        AccountDto account = restTemplate.getForObject(urlApigateway+urlAccounts+depositDtoMono.getToAccountId(),AccountDto.class);
-        LOGGER.debug("restTemplate:"+account.getAccountNumber());
 
-        calculateBalance(account,depositDtoMono);
+        try {
+            AccountDto account = restTemplate.getForObject(urlApigateway + urlAccounts + depositDto.getToAccountId(), AccountDto.class);
+            LOGGER.debug("restTemplate:" + account.getAccountNumber());
 
-        //AccountDto dto = ((AccountDto) monoDto.block());
-        //LOGGER.debug("client:"+dto);
-        return Mono.just(depositDtoMono).map(AppUtils::dtoToEntity)
+            if (approveDeposit(account, depositDto)) {
+                LOGGER.debug("calculateBalance:");
+                calculateBalance(account, depositDto);
+                LOGGER.debug("updateBalanceAccount:");
+                updateBalanceAccount(account);
+                LOGGER.debug("savingDeposit:");
+                return savingDeposit(depositDto);
+            } else {
+                throw new Exception("Error: Deposito no permitido");
+            }
+        }catch (Exception e){
+            LOGGER.error("TransactionError",e);
+            //rolback transaction
+            return null;
+        }
+    }
+
+    private Mono<DepositDto> savingDeposit(DepositDto depositDto) {
+        LOGGER.debug("Service.savingDeposit");
+        return Mono.just(depositDto).map(AppUtils::dtoToEntity)
                 .flatMap(depositRepository::insert)
                 .map(AppUtils::entityToDto);
     }
 
-    private AccountDto calculateBalance(AccountDto account, DepositDto depositDto) {
+    private void updateBalanceAccount(AccountDto account) {
+        restTemplate.put(urlApigateway+urlAccounts+account.getId(),account);
+    }
 
-        if(Constant.TIPO_CUENTA_PLAZO.equals(account.getAccountType())) {
-
-
+    /*
+*Pasivos (cuentas bancarias)
+*   -Ahorro:
+*   libre  de  comisión  por  mantenimiento  y  con  un  límite máximo de movimientos mensuales.
+*   -Cuenta  corriente:  posee  comisión  de mantenimiento y  sin  límite de movimientos mensuales.
+*   -Plazo  fijo:  libre  de  comisión  por  mantenimiento, solo  permite  un movimiento de
+*   retiro o depósito en un día específico del mes.
+ */
+    private boolean approveDeposit(AccountDto account, DepositDto depositDto) {
+        boolean resp = false;
+        if(Constant.TIPO_CUENTA_PLAZO.equalsIgnoreCase(account.getAccountType())) {
+            if(Constant.CAN_BE_DEPOSIT.equalsIgnoreCase(account.getCanBeDeposit())){
+                //account = caclulateBalance(account, depositDto);
+                resp = true;
+            }
+        } else if(Constant.TIPO_CUENTA_AHORRO.equalsIgnoreCase(account.getAccountType())){
+            if(Constant.DEPOSIT_LIMITED < account.getDepositLimited()) {
+                //account = caclulateBalance(account, depositDto);
+                resp = true;
+            }
+            resp = true;
+        } else if (Constant.TIPO_CUENTA_PLAZO.equalsIgnoreCase(account.getAccountType())){
+            resp = true;
         }
-        return account;
+        return resp;
+    }
+
+    private void calculateBalance(AccountDto account, DepositDto depositDto) throws NumberFormatException{
+
+        BigDecimal balance =  BigDecimal.valueOf(account.getBalance());
+        BigDecimal amount = BigDecimal.valueOf(depositDto.getAmount());
+        BigDecimal newBalance = balance.add(amount);
+
+        account.setBalance(newBalance.doubleValue());
+
     }
 
     public Mono<DepositDto> updateDeposit(Mono<DepositDto> DepositDtoMono, String id) {
