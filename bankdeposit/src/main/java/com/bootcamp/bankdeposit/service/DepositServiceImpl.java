@@ -99,8 +99,7 @@ public class DepositServiceImpl implements DepositService {
 */
 
         try {
-            AccountDto account = restTemplate.getForObject(urlApigateway + urlAccounts + depositDto.getToAccountId(), AccountDto.class);
-            LOGGER.debug("restTemplate:" + account.getAccountNumber());
+            AccountDto account = obtainAccountToDeposit(depositDto);
 
             if (approveDeposit(account, depositDto)) {
                 LOGGER.debug("calculateBalance:");
@@ -117,6 +116,12 @@ public class DepositServiceImpl implements DepositService {
             //rolback transaction
             return null;
         }
+    }
+
+    private AccountDto obtainAccountToDeposit(DepositDto depositDto) {
+        AccountDto account = restTemplate.getForObject(urlApigateway + urlAccounts + depositDto.getToAccountId(), AccountDto.class);
+        LOGGER.debug("restTemplate:" + account.getAccountNumber());
+        return account;
     }
 
     private Mono<DepositDto> savingDeposit(DepositDto depositDto) {
