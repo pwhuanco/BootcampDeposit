@@ -1,17 +1,17 @@
 package com.bootcamp.bankdeposit.service;
 
 import com.bootcamp.bankdeposit.bean.Deposit;
-import com.bootcamp.bankdeposit.controller.DepositController;
 import com.bootcamp.bankdeposit.dto.DepositDto;
 import com.bootcamp.bankdeposit.repository.DepositRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DepositServiceImplTest {
 
@@ -29,7 +29,7 @@ class DepositServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        fluxDto = Flux.just(new Deposit("098765432", 13100.00, "USD", "007", "", "876543222", "Pepe", "8765432",""));
+        fluxDto = Flux.just(new Deposit("098765432", 13100.00, "USD", "007", "", "876543222", "Pepe", "8765432", ""));
 
         depositDtoMono = Mono.just(new DepositDto(13100.00, "USD", "007", "", "876543222", "Pepe", "8765432"));
     }

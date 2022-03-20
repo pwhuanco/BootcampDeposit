@@ -1,7 +1,11 @@
 package com.bootcamp.bankdeposit.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -10,16 +14,16 @@ import lombok.*;
 @Builder
 @JsonDeserialize
 public class AccountDto {
-	private String id;
-	private Double balance;
+    private String id;
+    private Double balance;
 
-	private String accountNumber;
-	private String accountType;
+    private String accountNumber;
+    private String accountType;
 
-	private String currency;
-	private String canBeDeposit;
+    private String currency;
+    private String canBeDeposit;
 
-	private int maxLimitMovementPerMonth;
-	private int movementPerMonth;
+    private int maxLimitMovementPerMonth;
+    private int movementPerMonth;
 
 }

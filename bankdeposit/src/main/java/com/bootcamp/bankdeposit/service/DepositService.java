@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 public interface DepositService {
 
     Flux<DepositDto> getDeposit();
+
     Mono<DepositDto> getDepositById(String id);
 
     //Mono<DepositDto> getDepositByName(String name);

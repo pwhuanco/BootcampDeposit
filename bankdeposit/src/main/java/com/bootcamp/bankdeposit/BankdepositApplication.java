@@ -10,12 +10,12 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class BankdepositApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BankdepositApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BankdepositApplication.class, args);
+    }
 
-	@Bean
-	public RestTemplate restTemplate(){
-		 return new RestTemplate();
-	}
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }

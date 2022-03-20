@@ -60,7 +60,7 @@ public class DepositServiceImpl implements DepositService {
 
     public Mono<DepositDto> saveDeposit(DepositDto depositDto) {
 //    public Mono<DepositDto> saveDeposit(Mono<DepositDto> depositDto) {
-        LOGGER.debug("url a invocar:"+urlApigateway+urlAccounts);
+        LOGGER.debug("url a invocar:" + urlApigateway + urlAccounts);
         /*depositDtoMono.subscribe(p ->
                  webClient.build().get().uri(urlApigateway+urlAccounts,p.getToAccountId())
                 .retrieve()
@@ -111,10 +111,12 @@ public class DepositServiceImpl implements DepositService {
             } else {
                 throw new Exception("Error: Deposito no permitido");
             }
-        }catch (Exception e){
-            LOGGER.error("TransactionError",e);
+        } catch (Exception e) {
+            LOGGER.error("TransactionError", e);
             //rolback transaction
-            return null;
+            DepositDto dep = new DepositDto();
+            dep.setDepositor("Deposito no permitido");
+            return Mono.just(dep);
         }
     }
 
@@ -132,38 +134,38 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private void updateBalanceAccount(AccountDto account) {
-        account.setMovementPerMonth(account.getMovementPerMonth()+1);
-        restTemplate.put(urlApigateway+urlAccounts+account.getId(),account);
+        account.setMovementPerMonth(account.getMovementPerMonth() + 1);
+        restTemplate.put(urlApigateway + urlAccounts + account.getId(), account);
     }
 
     /**
-    *Pasivos (cuentas bancarias)
-    *   -Ahorro:
-    *   libre  de  comisión  por  mantenimiento  y  con  un  límite máximo de movimientos mensuales.
-    *   -Cuenta  corriente:  posee  comisión  de mantenimiento y  sin  límite de movimientos mensuales.
-    *   -Plazo  fijo:  libre  de  comisión  por  mantenimiento, solo  permite  un movimiento de
-    *   retiro o depósito en un día específico del mes.
+     * Pasivos (cuentas bancarias)
+     * -Ahorro:
+     * libre  de  comisión  por  mantenimiento  y  con  un  límite máximo de movimientos mensuales.
+     * -Cuenta  corriente:  posee  comisión  de mantenimiento y  sin  límite de movimientos mensuales.
+     * -Plazo  fijo:  libre  de  comisión  por  mantenimiento, solo  permite  un movimiento de
+     * retiro o depósito en un día específico del mes.
      */
     private boolean approveDeposit(AccountDto account, DepositDto depositDto) {
         boolean resp = false;
-        if(Constant.TIPO_CUENTA_PLAZO.equalsIgnoreCase(account.getAccountType())) {
-            if(Constant.CAN_BE_DEPOSIT.equalsIgnoreCase(account.getCanBeDeposit())){
+        if (Constant.TIPO_CUENTA_PLAZO.equalsIgnoreCase(account.getAccountType())) {
+            if (Constant.CAN_BE_DEPOSIT.equalsIgnoreCase(account.getCanBeDeposit())) {
 
                 resp = true;
             }
-        } else if(Constant.TIPO_CUENTA_AHORRO.equalsIgnoreCase(account.getAccountType())){
-            if(account.getMovementPerMonth() <= account.getMaxLimitMovementPerMonth()) {
+        } else if (Constant.TIPO_CUENTA_AHORRO.equalsIgnoreCase(account.getAccountType())) {
+            if (account.getMovementPerMonth() <= account.getMaxLimitMovementPerMonth()) {
                 resp = true;
             }
-        } else if (Constant.TIPO_CUENTA_CORRIENTE.equalsIgnoreCase(account.getAccountType())){
+        } else if (Constant.TIPO_CUENTA_CORRIENTE.equalsIgnoreCase(account.getAccountType())) {
             resp = true;
         }
         return resp;
     }
 
-    private void calculateBalance(AccountDto account, DepositDto depositDto) throws NumberFormatException{
+    private void calculateBalance(AccountDto account, DepositDto depositDto) throws NumberFormatException {
 
-        BigDecimal balance =  BigDecimal.valueOf(account.getBalance());
+        BigDecimal balance = BigDecimal.valueOf(account.getBalance());
         BigDecimal amount = BigDecimal.valueOf(depositDto.getAmount());
         BigDecimal newBalance = balance.add(amount);
 

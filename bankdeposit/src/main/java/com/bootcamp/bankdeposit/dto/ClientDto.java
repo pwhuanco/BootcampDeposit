@@ -1,7 +1,11 @@
 package com.bootcamp.bankdeposit.dto;
 
 import com.bootcamp.bankdeposit.bean.ClientType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
