@@ -19,4 +19,5 @@ public interface DepositService {
     Mono<DepositDto> updateDeposit(Mono<DepositDto> depositDtoMono, String id);
 
     Mono<Void> deleteDeposit(String id);
+
 }

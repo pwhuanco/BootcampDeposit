@@ -26,8 +26,12 @@ public class AccountDto {
     private int maxLimitMovementPerMonth;
     private int movementPerMonth;
 
-    private int minimumOpeningAmount;
+    private Double minimumOpeningAmount;
 
+    private Double minimumDailyAverageAmountEachMonth;
+
+
+    private int maxLimitTransaction;
 
 
 }
