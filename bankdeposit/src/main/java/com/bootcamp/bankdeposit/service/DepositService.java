@@ -14,6 +14,8 @@ public interface DepositService {
 
     //Mono<DepositDto> getDepositByDepositNumber(String depositNumber);
 
+    Mono<DepositDto> doTransfer(DepositDto depositDto);
+
     Mono<DepositDto> saveDeposit(DepositDto depositDtoMono);
 
     Mono<DepositDto> updateDeposit(Mono<DepositDto> depositDtoMono, String id);
