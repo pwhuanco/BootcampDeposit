@@ -35,4 +35,11 @@ public class Account {
      * limitCounter: acumula la ncatidad de depositos que se van realizando
      */
     private int movementPerMonth;
+
+    /**
+     *minimumOpeningAmount: monto mínimo de apertura que puede ser 0.
+     */
+
+    private int minimumOpeningAmount;
+
 }
