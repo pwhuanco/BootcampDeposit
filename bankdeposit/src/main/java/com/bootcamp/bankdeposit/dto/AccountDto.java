@@ -26,4 +26,8 @@ public class AccountDto {
     private int maxLimitMovementPerMonth;
     private int movementPerMonth;
 
+    private int minimumOpeningAmount;
+
+
+
 }
