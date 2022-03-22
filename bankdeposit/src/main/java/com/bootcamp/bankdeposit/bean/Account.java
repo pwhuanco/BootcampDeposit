@@ -40,6 +40,16 @@ public class Account {
      *minimumOpeningAmount: monto mínimo de apertura que puede ser 0.
      */
 
-    private int minimumOpeningAmount;
+    private Double minimumOpeningAmount;
+
+
+    /**
+     *minimumDailyAverageAmountEachMonth: monto mínimo de promedio diario cada mes
+     */
+
+    private Double minimumDailyAverageAmountEachMonth;
+
+    private int maxLimitTransaction;
+
 
 }

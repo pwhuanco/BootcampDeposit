@@ -11,14 +11,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Data
 public class Deposit {
+    //Ahora soporta transferencias entre mismo cliente o terceros
     @Id
     private String id;
     private Double amount;
     private String currency;
     private String idClient;
+    private String fromAccountId;
     private String fromAccountNumber;
     private String toAccountId;
     private String toAccountNumber;
-    private String depositor;
+    private String idDepositor;
     private String timestamp;
 }

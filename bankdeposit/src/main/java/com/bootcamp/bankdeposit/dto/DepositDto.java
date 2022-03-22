@@ -16,19 +16,21 @@ public class DepositDto {
     private Double amount;
     private String currency;
     private String idClient;
+    private String fromAccountId;
     private String fromAccountNumber;
     private String toAccountNumber;
     private String toAccountId;
-    private String depositor;
+    private String idDepositor;
     private String timestamp;
 
-    public DepositDto(Double amount, String currency, String idClient, String fromAccountNumber, String toAccountNumber, String depositor, String timestamp) {
+    public DepositDto(Double amount, String currency, String idClient, String fromAccountId, String fromAccountNumber, String toAccountNumber, String toAccountId, String idDepositor, String timestamp) {
         this.amount = amount;
         this.currency = currency;
         this.idClient = idClient;
+        this.fromAccountId=fromAccountId;
         this.fromAccountNumber = fromAccountNumber;
         this.toAccountNumber = toAccountNumber;
-        this.depositor = depositor;
+        this.idDepositor = idDepositor;
         this.timestamp = timestamp;
     }
 }

@@ -45,6 +45,12 @@ public class DepositServiceImpl implements DepositService {
     public Mono<DepositDto> getDepositById(String id) {
         return depositRepository.findById(id).map(AppUtils::entityToDto);
     }
+
+    @Override
+    public Mono<DepositDto> doTransfer(DepositDto depositDto) {
+
+        return null;
+    }
 /*
     @Override
     public Mono<DepositDto> getDepositByName(String name) {
@@ -115,7 +121,7 @@ public class DepositServiceImpl implements DepositService {
             LOGGER.error("TransactionError", e);
             //rolback transaction
             DepositDto dep = new DepositDto();
-            dep.setDepositor("Deposito no permitido");
+            dep.setIdDepositor("Deposito no permitido");
             return Mono.just(dep);
         }
     }
