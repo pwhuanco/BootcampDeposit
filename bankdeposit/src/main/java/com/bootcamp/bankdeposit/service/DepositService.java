@@ -1,5 +1,6 @@
 package com.bootcamp.bankdeposit.service;
 
+import com.bootcamp.bankdeposit.dto.AccountDto;
 import com.bootcamp.bankdeposit.dto.DepositDto;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,7 +15,7 @@ public interface DepositService {
 
     //Mono<DepositDto> getDepositByDepositNumber(String depositNumber);
 
-    Mono<DepositDto> doTransfer(DepositDto depositDto);
+    Mono<AccountDto> doTransfer(DepositDto depositDto);
 
     Mono<DepositDto> saveDeposit(DepositDto depositDtoMono);
 

@@ -47,9 +47,17 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public Mono<DepositDto> doTransfer(DepositDto depositDto) {
+    public Mono<AccountDto> doTransfer(DepositDto depositDto) {
+        AccountDto accountOutgoing = restTemplate.getForObject(urlApigateway + urlAccounts + depositDto.getFromAccountId(), AccountDto.class);
+        AccountDto accountDestination = restTemplate.getForObject(urlApigateway + urlAccounts + depositDto.getToAccountId(), AccountDto.class);
+        if(accountOutgoing.getBalance()>=depositDto.getAmount()&&accountOutgoing.getCurrency()==accountDestination.getCurrency()){
+            accountOutgoing.setBalance(accountDestination.getBalance()-depositDto.getAmount());
+            accountDestination.setBalance(accountDestination.getBalance()+depositDto.getAmount());
+                return Mono.just(accountDestination);
+        }else{
+            return null;
+        }
 
-        return null;
     }
 /*
     @Override
