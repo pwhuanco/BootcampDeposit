@@ -1,6 +1,6 @@
-FROM java:8
+FROM openjdk:11.0-jdk-slim-stretch
 VOLUME /tmp
-ADD target/microservice-0.0.1-SNAPSHOT.jar desposit.jar
-RUN bash -c 'touch /desposit.jar'
-ENV JAVA_OPTS=""
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /desposit.jar"]
+ADD target/bankdeposit-0.0.1-SNAPSHOT.jar deposit.jar
+RUN bash -c 'touch /deposit.jar'
+ENV JAVA_OPTS="-Djdk.tls.client.protocols=TLSv1.2"
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /deposit.jar"]
